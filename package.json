@@ -1,0 +1,44 @@
+{
+  "name": "list2chart",
+  "version": "0.1.0",
+  "description": "",
+  "main": "lib/index.js",
+  "scripts": {
+    "lint": "eslint ./lib ./tests",
+    "test": "mocha --recursive --require tests/bootstrap.js tests/unit/",
+    "test:ci": "nyc --reporter=text mocha --recursive tests/",
+    "coverage": "nyc npm test"
+  },
+  "files": [
+    "/lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jormaechea/list2chart.git"
+  },
+  "keywords": [
+    "list",
+    "chart",
+    "google",
+    "charts",
+    "graphs"
+  ],
+  "author": "Joaquin Ormaechea <https://github.com/jormaechea>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jormaechea/list2chart/issues"
+  },
+  "homepage": "https://github.com/jormaechea/list2chart#readme",
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.20.2",
+    "husky": "^4.2.5",
+    "mocha": "^7.1.1",
+    "nyc": "^15.0.1",
+    "sinon": "^9.0.2"
+  },
+  "dependencies": {
+    "lllog": "^1.1.2"
+  }
+}
