@@ -161,4 +161,34 @@ describe('Pie Chart', () => {
 		]);
 	});
 
+	it('Should map a title by it\'s given titleMapper', () => {
+
+		const pieChart = new PieChart({
+			label: {
+				source: 'name',
+				titleMapper: s => s.toUpperCase()
+			},
+			value: {
+				source: 'quantity',
+				titleMapper: s => `The ${s}`
+			}
+		});
+
+		pieChart.setData(sampleData);
+
+		const {
+			data,
+			options
+		} = pieChart.parse();
+
+		assert.deepStrictEqual(options, {});
+
+		assert.deepStrictEqual(data, [
+			['NAME', 'The quantity'],
+			['First element', 10],
+			['Second element', 20],
+			['Third element', 60]
+		]);
+	});
+
 });

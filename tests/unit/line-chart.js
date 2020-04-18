@@ -191,4 +191,33 @@ describe('Line Chart', () => {
 		]);
 	});
 
+	it('Should map a title by it\'s given titleMapper', () => {
+
+		const lineChart = new LineChart({
+			label: {
+				source: 'date',
+				titleMapper: s => `The ${s}`
+			},
+			values: [{
+				source: 'quantity'
+			}]
+		});
+
+		lineChart.setData(sampleData);
+
+		const {
+			data,
+			options
+		} = lineChart.parse();
+
+		assert.deepStrictEqual(options, {});
+
+		assert.deepStrictEqual(data, [
+			['The date', 'quantity'],
+			['2020-04-15', 10],
+			['2020-04-16', 20],
+			['2020-04-17', 60]
+		]);
+	});
+
 });
