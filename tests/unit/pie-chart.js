@@ -103,4 +103,62 @@ describe('Pie Chart', () => {
 		]);
 	});
 
+	it('Should map a value by it\'s given valueMapper', () => {
+
+		const pieChart = new PieChart({
+			label: {
+				source: 'name'
+			},
+			value: {
+				source: 'quantity',
+				valueMapper: v => v * 10
+			}
+		});
+
+		pieChart.setData(sampleData);
+
+		const {
+			data,
+			options
+		} = pieChart.parse();
+
+		assert.deepStrictEqual(options, {});
+
+		assert.deepStrictEqual(data, [
+			['name', 'quantity'],
+			['First element', 100],
+			['Second element', 200],
+			['Third element', 600]
+		]);
+	});
+
+	it('Should map a label by it\'s given valueMapper', () => {
+
+		const pieChart = new PieChart({
+			label: {
+				source: 'name',
+				valueMapper: s => s.toUpperCase()
+			},
+			value: {
+				source: 'quantity'
+			}
+		});
+
+		pieChart.setData(sampleData);
+
+		const {
+			data,
+			options
+		} = pieChart.parse();
+
+		assert.deepStrictEqual(options, {});
+
+		assert.deepStrictEqual(data, [
+			['name', 'quantity'],
+			['FIRST ELEMENT', 10],
+			['SECOND ELEMENT', 20],
+			['THIRD ELEMENT', 60]
+		]);
+	});
+
 });

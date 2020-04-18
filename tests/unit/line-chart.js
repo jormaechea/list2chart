@@ -133,4 +133,62 @@ describe('Line Chart', () => {
 		]);
 	});
 
+	it('Should map a value by it\'s given valueMapper', () => {
+
+		const lineChart = new LineChart({
+			label: {
+				source: 'date'
+			},
+			values: [{
+				source: 'quantity',
+				valueMapper: v => v * 10
+			}]
+		});
+
+		lineChart.setData(sampleData);
+
+		const {
+			data,
+			options
+		} = lineChart.parse();
+
+		assert.deepStrictEqual(options, {});
+
+		assert.deepStrictEqual(data, [
+			['date', 'quantity'],
+			['2020-04-15', 100],
+			['2020-04-16', 200],
+			['2020-04-17', 600]
+		]);
+	});
+
+	it('Should map a label by it\'s given valueMapper', () => {
+
+		const lineChart = new LineChart({
+			label: {
+				source: 'date',
+				valueMapper: d => new Date(d)
+			},
+			values: [{
+				source: 'quantity'
+			}]
+		});
+
+		lineChart.setData(sampleData);
+
+		const {
+			data,
+			options
+		} = lineChart.parse();
+
+		assert.deepStrictEqual(options, {});
+
+		assert.deepStrictEqual(data, [
+			['date', 'quantity'],
+			[new Date('2020-04-15'), 10],
+			[new Date('2020-04-16'), 20],
+			[new Date('2020-04-17'), 60]
+		]);
+	});
+
 });
