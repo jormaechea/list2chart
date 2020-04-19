@@ -196,21 +196,12 @@ describe('Pie Chart', () => {
 		const pieChart = new PieChart({
 			pipeline: [
 				{
-					map: ({ quantity, ...row }) => ({ ...row, quantity: quantity + 1 })
+					map: ({ quantity, id, ...row }) => ({ ...row, quantity: quantity + id })
 				},
 				{
 					aggregate: 'quantity',
 					groupTitleTarget: 'type',
-					groups: [
-						{
-							title: 'odd',
-							validator: n => ((n % 2) === 1)
-						},
-						{
-							title: 'even',
-							validator: n => ((n % 2) === 0)
-						}
-					]
+					groupSelector: ({ quantity }) => ((quantity % 2) === 1 ? 'odd' : 'even')
 				}
 			],
 			label: {
@@ -232,8 +223,8 @@ describe('Pie Chart', () => {
 
 		assert.deepStrictEqual(data, [
 			['type', 'quantity'],
-			['odd', 3],
-			['even', 0]
+			['odd', 2],
+			['even', 1]
 		]);
 	});
 
@@ -245,12 +236,7 @@ describe('Pie Chart', () => {
 					aggregate: 'quantity',
 					aggregationOperation: 'sum',
 					groupTitleTarget: 'sum',
-					groups: [
-						{
-							title: 'total',
-							validator: () => true
-						}
-					]
+					groupSelector: () => 'total'
 				}
 			],
 			label: {
@@ -273,6 +259,39 @@ describe('Pie Chart', () => {
 		assert.deepStrictEqual(data, [
 			['sum', 'quantity'],
 			['total', 90]
+		]);
+	});
+
+	it('Should skip data pipeline if it\'s type is not recognized', () => {
+
+		const pieChart = new PieChart({
+			pipeline: [
+				{
+					justUnknown: true
+				}
+			],
+			label: {
+				source: 'name'
+			},
+			value: {
+				source: 'quantity'
+			}
+		});
+
+		pieChart.setData(sampleData);
+
+		const {
+			data,
+			options
+		} = pieChart.parse();
+
+		assert.deepStrictEqual(options, {});
+
+		assert.deepStrictEqual(data, [
+			['name', 'quantity'],
+			['First element', 10],
+			['Second element', 20],
+			['Third element', 60]
 		]);
 	});
 
