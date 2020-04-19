@@ -191,4 +191,89 @@ describe('Pie Chart', () => {
 		]);
 	});
 
+	it('Should aggregate data by it\'s given pipeline with the default aggregationOperation', () => {
+
+		const pieChart = new PieChart({
+			pipeline: [
+				{
+					map: ({ quantity, ...row }) => ({ ...row, quantity: quantity + 1 })
+				},
+				{
+					aggregate: 'quantity',
+					groupTitleTarget: 'type',
+					groups: [
+						{
+							title: 'odd',
+							validator: n => ((n % 2) === 1)
+						},
+						{
+							title: 'even',
+							validator: n => ((n % 2) === 0)
+						}
+					]
+				}
+			],
+			label: {
+				source: 'type'
+			},
+			value: {
+				source: 'quantity'
+			}
+		});
+
+		pieChart.setData(sampleData);
+
+		const {
+			data,
+			options
+		} = pieChart.parse();
+
+		assert.deepStrictEqual(options, {});
+
+		assert.deepStrictEqual(data, [
+			['type', 'quantity'],
+			['odd', 3],
+			['even', 0]
+		]);
+	});
+
+	it('Should aggregate data by it\'s given pipeline with a custom aggregationOperation', () => {
+
+		const pieChart = new PieChart({
+			pipeline: [
+				{
+					aggregate: 'quantity',
+					aggregationOperation: 'sum',
+					groupTitleTarget: 'sum',
+					groups: [
+						{
+							title: 'total',
+							validator: () => true
+						}
+					]
+				}
+			],
+			label: {
+				source: 'sum'
+			},
+			value: {
+				source: 'quantity'
+			}
+		});
+
+		pieChart.setData(sampleData);
+
+		const {
+			data,
+			options
+		} = pieChart.parse();
+
+		assert.deepStrictEqual(options, {});
+
+		assert.deepStrictEqual(data, [
+			['sum', 'quantity'],
+			['total', 90]
+		]);
+	});
+
 });
