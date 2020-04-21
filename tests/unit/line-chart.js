@@ -220,4 +220,91 @@ describe('Line Chart', () => {
 		]);
 	});
 
+	it('Should sort the data by it\'s key', () => {
+
+		const lineChart = new LineChart({
+			label: {
+				source: 'date'
+			},
+			values: [{
+				source: 'quantity'
+			}],
+			sortData: (key1, key2) => key2.localeCompare(key1)
+		});
+
+		lineChart.setData(sampleData);
+
+		const {
+			data,
+			options
+		} = lineChart.parse();
+
+		assert.deepStrictEqual(options, {});
+
+		assert.deepStrictEqual(data, [
+			['date', 'quantity'],
+			['2020-04-17', 60],
+			['2020-04-16', 20],
+			['2020-04-15', 10]
+		]);
+	});
+
+	it('Should not sort the titles', () => {
+
+		const lineChart = new LineChart({
+			label: {
+				source: 'date'
+			},
+			values: [{
+				source: 'quantity'
+			}],
+			sortData: (key1, key2) => key1.localeCompare(key2)
+		});
+
+		lineChart.setData(sampleData);
+
+		const {
+			data,
+			options
+		} = lineChart.parse();
+
+		assert.deepStrictEqual(options, {});
+
+		assert.deepStrictEqual(data, [
+			['date', 'quantity'],
+			['2020-04-15', 10],
+			['2020-04-16', 20],
+			['2020-04-17', 60]
+		]);
+	});
+
+	it('Should ignore sort if it\'s not a function', () => {
+
+		const lineChart = new LineChart({
+			label: {
+				source: 'date'
+			},
+			values: [{
+				source: 'quantity'
+			}],
+			sortData: 'someInvalidSort'
+		});
+
+		lineChart.setData(sampleData);
+
+		const {
+			data,
+			options
+		} = lineChart.parse();
+
+		assert.deepStrictEqual(options, {});
+
+		assert.deepStrictEqual(data, [
+			['date', 'quantity'],
+			['2020-04-15', 10],
+			['2020-04-16', 20],
+			['2020-04-17', 60]
+		]);
+	});
+
 });
